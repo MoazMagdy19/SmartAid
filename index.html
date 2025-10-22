@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SmartAid — Safety Prototype</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- audio assets: ضع ملفات الصوت في مجلد sounds/ أو استخدم رابط كامل -->
+  <audio id="audio-motion" preload="auto" src="alarm-301729.mp3"></audio>
+  <audio id="audio-gas" preload="auto" src="alarm-301729.mp3"></audio>
+  <audio id="audio-alarm" preload="auto" src="alarm-301729.mp3"></audio>
+</head>
+<body>
+
+  <!-- Top-level app -->
+  <div id="app" class="app">
+
+    <!-- Pair area (button + paired name) -->
+    <div id="pair-area" style="position:fixed;left:18px;top:18px;z-index:90;display:flex;align-items:center;gap:10px">
+      <button id="btn-pair" class="theme-toggle" aria-label="Pair device" style="padding:8px 10px;border-radius:10px;border:0;background:rgba(255,255,255,0.12);color:#fff;cursor:pointer">Pair Device</button>
+      <span id="paired-name" style="font-size:14px;color:#fff;opacity:0.95"></span>
+    </div>
+
+    <!-- Theme toggle -->
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" style="position:fixed;right:18px;top:18px;z-index:90;width:44px;height:44px;border-radius:10px;border:0;background:rgba(255,255,255,0.2);color:#fff;font-size:18px;cursor:pointer;backdrop-filter: blur(6px)">🌙</button>
+
+    <!-- Main container where views live -->
+    <main id="main" class="main" style="max-width:1100px;margin:0 auto;padding:28px;color:#05203b">
+
+      <!-- Home -->
+      <section id="view-home" class="view active">
+        <div class="hero" style="display:flex;flex-direction:column;align-items:center;gap:18px;padding:36px 12px;background:rgba(255,255,255,0.06);border-radius:16px">
+          <div class="logo-circle" style="width:120px;height:120px;border-radius:999px;background:rgba(255,255,255,0.14);display:flex;align-items:center;justify-content:center">
+            <div class="logo-inner" style="width:64px;height:64px;border-radius:999px;background:#fff;box-shadow:0 10px 30px rgba(2,6,23,0.06)"></div>
+          </div>
+
+          <h1 class="title" style="font-size:42px;color:#fff;margin:0">SmartAid</h1>
+          <p class="subtitle" style="color:#f2f6fb;max-width:720px;text-align:center;margin:0">Helping blind and elderly people stay safe using smart sensors.</p>
+
+          <div class="features" style="display:flex;gap:20px;align-items:center;justify-content:center;margin-top:12px">
+            <div class="feature" style="display:flex;flex-direction:column;align-items:center;color:#fff;gap:8px">
+              <div class="feature-ico" style="font-size:28px;background:rgba(255,255,255,0.12);padding:12px;border-radius:12px">👁</div>
+              <div>Vision Support</div>
+            </div>
+            <div class="feature" style="display:flex;flex-direction:column;align-items:center;color:#fff;gap:8px">
+              <div class="feature-ico" style="font-size:28px;background:rgba(255,255,255,0.12);padding:12px;border-radius:12px">🛡</div>
+              <div>Safety First</div>
+            </div>
+            <div class="feature" style="display:flex;flex-direction:column;align-items:center;color:#fff;gap:8px">
+              <div class="feature-ico" style="font-size:28px;background:rgba(255,255,255,0.12);padding:12px;border-radius:12px">💗</div>
+              <div>Care & Support</div>
+            </div>
+          </div>
+
+          <div class="actions" style="display:flex;gap:12px;margin-top:16px">
+            <button class="btn primary" data-nav="simulation" style="padding:12px 18px;border-radius:12px;border:0;cursor:pointer;font-weight:700;background:#fff;color:#007BFF">Start Simulation</button>
+            <button class="btn outline" data-nav="sensors" style="padding:12px 18px;border-radius:12px;border:0;cursor:pointer;font-weight:700;background:transparent;color:#007BFF;border:1.5px solid rgba(255,255,255,0.18)">Sensors Info</button>
+            <button class="btn outline" data-nav="about" style="padding:12px 18px;border-radius:12px;border:0;cursor:pointer;font-weight:700;background:transparent;color:#007BFF;border:1.5px solid rgba(255,255,255,0.18)">About</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Simulation -->
+      <section id="view-simulation" class="view hidden" style="padding-top:12px">
+        <div class="toprow" style="display:flex;justify-content:flex-start;margin-bottom:12px">
+          <button class="btn-back" data-nav="home" style="padding:8px 12px;border-radius:10px;border:0;background:#fff;color:#007BFF;cursor:pointer;box-shadow:0 10px 30px rgba(2,6,23,0.06)">← Back</button>
+        </div>
+
+        <h2 class="page-title" style="font-size:28px;margin:6px 0;color:#fff">Safety Dashboard</h2>
+        <p class="muted" style="color:rgba(255,255,255,0.85)">Real-time sensor monitoring and alerts</p>
+
+        <div id="alert-banner" class="alert-banner hidden" style="padding:12px;border-radius:10px;margin:12px 0;color:#fff;font-weight:700;display:flex;align-items:center;gap:10px"></div>
+
+        <div class="grid-cards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:14px">
+          <div class="card sensor-card" id="card-distance" style="background:#fff;border-radius:12px;padding:22px;box-shadow:0 10px 30px rgba(2,6,23,0.06);text-align:center">
+            <div class="sensor-ico" style="font-size:32px;margin-bottom:8px">🔊</div>
+            <h3>Distance Sensor</h3>
+            <p class="muted" style="color:#6b7280">Ultrasonic Detection</p>
+            <div class="badge" id="badge-distance" style="display:inline-block;padding:6px 10px;border-radius:999px;margin-top:8px;font-weight:700;background:#efefef">Standby</div>
+          </div>
+
+          <div class="card sensor-card" id="card-gas" style="background:#fff;border-radius:12px;padding:22px;box-shadow:0 10px 30px rgba(2,6,23,0.06);text-align:center">
+            <div class="sensor-ico" style="font-size:32px;margin-bottom:8px">🌫</div>
+            <h3>Gas Sensor</h3>
+            <p class="muted" style="color:#6b7280">Air Quality Monitor</p>
+            <div class="badge" id="badge-gas" style="display:inline-block;padding:6px 10px;border-radius:999px;margin-top:8px;font-weight:700;background:#efefef">Normal</div>
+          </div>
+
+          <div class="card sensor-card" id="card-alarm" style="background:#fff;border-radius:12px;padding:22px;box-shadow:0 10px 30px rgba(2,6,23,0.06);text-align:center">
+            <div class="sensor-ico" style="font-size:32px;margin-bottom:8px">🔔</div>
+            <h3>Alarm System</h3>
+            <p class="muted" style="color:#6b7280">Audio Alert</p>
+            <div class="badge" id="badge-alarm" style="display:inline-block;padding:6px 10px;border-radius:999px;margin-top:8px;font-weight:700;background:#efefef">Silent</div>
+          </div>
+
+          <div class="card sensor-card" id="card-battery" style="background:#fff;border-radius:12px;padding:22px;box-shadow:0 10px 30px rgba(2,6,23,0.06);text-align:center">
+            <div class="sensor-ico" style="font-size:32px;margin-bottom:8px">🔋</div>
+            <h3>Battery Level</h3>
+            <p class="muted" id="battery-percent" style="color:#6b7280">85%</p>
+            <div class="progress" style="height:12px;background:#eee;border-radius:999px;overflow:hidden;margin-top:10px">
+              <div id="battery-bar" class="progress-bar" style="height:100%;background:linear-gradient(90deg,#007BFF,#2BB0FF);width:85%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls-row" style="display:flex;gap:12px;justify-content:center;margin-top:20px">
+          <button id="btn-motion" class="btn primary" style="padding:12px 18px;border-radius:12px;border:0;cursor:pointer;font-weight:700;background:#007BFF;color:#fff">Detect Motion</button>
+          <button id="btn-gas" class="btn danger" style="padding:12px 18px;border-radius:12px;border:0;cursor:pointer;font-weight:700;background:#dc3545;color:#fff">Detect Gas</button>
+          <button id="btn-safe" class="btn success" style="padding:12px 18px;border-radius:12px;border:0;cursor:pointer;font-weight:700;background:#28a745;color:#fff">Safe Mode</button>
+        </div>
+
+        <!-- Connected Devices & Send Alert -->
+        <div id="connected-panel" class="connected-panel card" style="margin-top:20px;background:#fff;border-radius:12px;padding:14px;box-shadow:0 8px 24px rgba(2,6,23,0.06);color:#05203b">
+          <h3 style="margin:0 0 12px 0">Connected Devices (Internet)</h3>
+
+          <div class="connected-row" style="display:flex;gap:12px;align-items:center;margin:12px 0;">
+            <input id="new-device-name" placeholder="Device name (e.g., Home Unit)" style="flex:1;padding:8px;border-radius:8px;border:1px solid #e6e6e6" />
+            <button id="btn-add-device" class="btn outline" style="padding:8px 12px;border-radius:8px;border:1px solid #e6e6e6;background:transparent;cursor:pointer">Add Device</button>
+          </div>
+
+          <div id="devices-list" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+
+          <hr style="margin:14px 0;border:none;border-top:1px dashed rgba(0,0,0,0.06)" />
+
+          <h4 style="margin:0 0 8px 0">Send Alert to Contact</h4>
+          <div style="display:flex;gap:10px;align-items:center;margin:10px 0;flex-wrap:wrap">
+            <select id="device-select" style="padding:8px;border-radius:8px;border:1px solid #e6e6e6;min-width:180px"></select>
+            <input id="alert-contact" placeholder="Recipient (phone or email or name)" style="flex:1;padding:8px;border-radius:8px;border:1px solid #e6e6e6" />
+            <button id="btn-send-alert" class="btn primary" style="padding:8px 12px;border-radius:8px;border:0;background:#007BFF;color:#fff;cursor:pointer">Send Alert</button>
+          </div>
+
+          <div id="alert-log" style="margin-top:12px;font-size:13px;color:#444"></div>
+        </div>
+      </section>
+
+      <!-- Sensors Info -->
+      <section id="view-sensors" class="view hidden" style="padding-top:12px">
+        <div class="toprow" style="display:flex;justify-content:flex-start;margin-bottom:12px">
+          <button class="btn-back" data-nav="home" style="padding:8px 12px;border-radius:10px;border:0;background:#fff;color:#007BFF;cursor:pointer;box-shadow:0 10px 30px rgba(2,6,23,0.06)">← Back</button>
+        </div>
+
+        <h2 class="page-title" style="font-size:28px;margin:6px 0;color:#fff">Sensor Components</h2>
+        <p class="muted" style="color:rgba(255,255,255,0.85)">Learn about the smart sensors that power the system</p>
+
+        <div class="sensors-grid" id="sensors-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:16px">
+        </div>
+      </section>
+
+      <!-- About -->
+      <section id="view-about" class="view hidden" style="padding-top:12px">
+        <div class="toprow" style="display:flex;justify-content:flex-start;margin-bottom:12px">
+          <button class="btn-back" data-nav="home" style="padding:8px 12px;border-radius:10px;border:0;background:#fff;color:#007BFF;cursor:pointer;box-shadow:0 10px 30px rgba(2,6,23,0.06)">← Back</button>
+        </div>
+
+        <h2 class="page-title" style="font-size:28px;margin:6px 0;color:#fff">About Assistant</h2>
+        <p class="muted" style="color:rgba(255,255,255,0.85)">Empowering independence through smart technology</p>
+
+        <div class="about-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+          <div class="card about-card" style="background:#fff;padding:18px;border-radius:12px">
+            <h3>Our Mission</h3>
+            <p>To create accessible safety tech for blind, elderly and people with disabilities to stay independent and safe.</p>
+          </div>
+
+          <div class="card about-card" style="background:#fff;padding:18px;border-radius:12px">
+            <h3>How It Helps</h3>
+            <p>Ultrasonic sensors prevent collisions, gas sensor detects leaks, motion sensor increases awareness and buzzer alerts instantly.</p>
+          </div>
+
+          <div class="card about-card" style="background:#fff;padding:18px;border-radius:12px">
+            <h3>Technology</h3>
+            <p>Built with Arduino Uno R3, ultrasonic, gas sensors and rechargeable battery. Portable and easy to use.</p>
+          </div>
+
+          <div class="card about-card" style="background:#fff;padding:18px;border-radius:12px">
+            <h3>Team</h3>
+            <ul>
+              <li>Shrouk Hassan — Concept & Research</li>
+              <li>Mona Ahmed — Concept & Research</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="cta" style="text-align:center;margin-top:18px">
+          <button class="btn primary" data-nav="simulation" style="padding:12px 18px;border-radius:12px;border:0;cursor:pointer;font-weight:700;background:#fff;color:#007BFF">Try the Simulation</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- script.js should contain all the JS we discussed (navigation, simulation, listen mode, pairing, connected devices features) -->
+  <script src="script.js"></script>
+</body>
+</html>
