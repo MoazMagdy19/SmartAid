@@ -6,14 +6,14 @@
   <title>SmartAid — Safety Prototype</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <!-- audio assets: ضع ملفات الصوت في مجلد sounds/ أو استخدم رابط كامل -->
+  
   <audio id="audio-motion" preload="auto" src="alarm-301729.mp3"></audio>
   <audio id="audio-gas" preload="auto" src="alarm-301729.mp3"></audio>
   <audio id="audio-alarm" preload="auto" src="alarm-301729.mp3"></audio>
 </head>
 <body>
 
-  <!-- Top-level app -->
+  
   <div id="app" class="app">
 
     <!-- Pair area (button + paired name) -->
@@ -116,7 +116,6 @@
 
           <div class="connected-row" style="display:flex;gap:12px;align-items:center;margin:12px 0;">
             <input id="new-device-name" placeholder="Device name (e.g., Home Unit)" style="flex:1;padding:8px;border-radius:8px;border:1px solid #e6e6e6" />
-            <button id="btn-add-device" class="btn outline" style="padding:8px 12px;border-radius:8px;border:1px solid #e6e6e6;background:transparent;cursor:pointer">Add Device</button>
           </div>
 
           <div id="devices-list" style="display:flex;gap:8px;flex-wrap:wrap"></div>
@@ -189,7 +188,8 @@
     </main>
   </div>
 
-  <!-- script.js should contain all the JS we discussed (navigation, simulation, listen mode, pairing, connected devices features) -->
+  
   <script src="script.js"></script>
 </body>
 </html>
+
