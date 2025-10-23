@@ -36,13 +36,6 @@
       el.classList.remove('hidden');
       el.classList.add('active');
       window.scrollTo(0, 0);
-      // Voice guidance on view change
-      switch (page) {
-        case 'home': speak('مرحباً! هذه الصفحة الرئيسية. اضغط ابدأ للتجربة.'); break;
-        case 'simulation': speak('تم فتح لوحة المراقبة. هنا يمكنك محاكاة حركة أو تسرب غاز.'); break;
-        case 'sensors': speak('معلومات الحساسات. هنا تفاصيل مكونات النظام.'); break;
-        case 'about': speak('معلومات عن النظام والفريق.'); break;
-      }
     }
   }
 
@@ -62,13 +55,11 @@
     if (dark) {
       document.body.classList.add('dark-mode');
       if (themeBtn) themeBtn.textContent = '☀';
-      document.body.style.background = 'linear-gradient(180deg,#0b1724,#2b3945)';
-      speak('تم تفعيل الوضع الداكن');
+      document.querySelector('.app').style.background = 'linear-gradient(180deg,#0b1724,#2b3945)';
     } else {
       document.body.classList.remove('dark-mode');
       if (themeBtn) themeBtn.textContent = '🌙';
-      document.body.style.background = '';
-      speak('تم إيقاف الوضع الداكن');
+      document.querySelector('.app').style.background = 'linear-gradient(180deg,var(--blue1),var(--gray))';
     }
   }
   if (themeBtn) themeBtn.addEventListener('click', updateTheme);
