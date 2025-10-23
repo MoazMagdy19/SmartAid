@@ -1,7 +1,6 @@
-// script.js (with Voice Guidance & Device Pairing)
-// Single-file app navigation + simulation (updated + Listen + Guidance + Pairing)
+
 (function () {
-  // pages — DOM elements
+  
   const views = {
     home: document.getElementById('view-home'),
     simulation: document.getElementById('view-simulation'),
@@ -9,7 +8,7 @@
     about: document.getElementById('view-about')
   };
 
-  // voice guidance helper
+  // voice guidance helpe
   function speak(text, opts = {}) {
     try {
       if (!('speechSynthesis' in window)) return;
@@ -118,8 +117,7 @@
       console.warn('Audio play failed', err);
     }
 
-    if (kind === 'motion') speak('انتباه، تم اكتشاف حركة قريبة');
-    if (kind === 'gas') speak('تنبيه! تم اكتشاف غاز');
+    // Removed automatic voice guidance for alarms
 
     setBattery(-2);
     clearTimeout(alarmTimeout);
@@ -139,7 +137,7 @@
       if (audioGas) { audioGas.pause(); audioGas.currentTime = 0; }
       if (audioAlarm) { audioAlarm.pause(); audioAlarm.currentTime = 0; }
     } catch (e) {}
-    speak('انتهى التنبيه. النظام في وضع طبيعي');
+    // Removed automatic voice guidance for alarm deactivation
   }
 
   function setAlert(type) {
