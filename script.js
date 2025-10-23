@@ -55,11 +55,9 @@
     if (dark) {
       document.body.classList.add('dark-mode');
       if (themeBtn) themeBtn.textContent = '☀';
-      document.querySelector('.app').style.background = 'linear-gradient(180deg,#0b1724,#2b3945)';
     } else {
       document.body.classList.remove('dark-mode');
       if (themeBtn) themeBtn.textContent = '🌙';
-      document.querySelector('.app').style.background = 'linear-gradient(180deg,var(--blue1),var(--gray))';
     }
   }
   if (themeBtn) themeBtn.addEventListener('click', updateTheme);
@@ -172,9 +170,9 @@
   const btnMotion = document.getElementById('btn-motion');
   const btnGas = document.getElementById('btn-gas');
   const btnSafe = document.getElementById('btn-safe');
-  if (btnMotion) btnMotion.addEventListener('click', () => { setAlert('motion'); speak('محاكاة اكتشاف حركة'); });
-  if (btnGas) btnGas.addEventListener('click', () => { setAlert('gas'); speak('محاكاة اكتشاف غاز'); });
-  if (btnSafe) btnSafe.addEventListener('click', () => { setAlert('safe'); speak('تم تفعيل وضع الأمان'); });
+  if (btnMotion) btnMotion.addEventListener('click', () => { setAlert('motion'); });
+  if (btnGas) btnGas.addEventListener('click', () => { setAlert('gas'); });
+  if (btnSafe) btnSafe.addEventListener('click', () => { setAlert('safe'); });
 
   if (batteryBar) batteryBar.style.width = batteryLevel + '%';
   if (batteryPercent) batteryPercent.textContent = batteryLevel + '%';
