@@ -45,11 +45,17 @@ html, body {
   cursor: pointer;
   font-weight: 600;
   background: rgba(255,255,255,0.12);
-  transition: background .18s;
+  transition: all 0.2s ease;
 }
 
 #pair-area button:hover {
   background: rgba(255,255,255,0.25);
+  transform: scale(1.02);
+  box-shadow: 0 10px 30px rgba(2,6,23,0.12);
+}
+
+#pair-area button:active {
+  transform: scale(0.98);
 }
 
 #paired-name {
@@ -84,7 +90,10 @@ html, body {
   display:flex;
   align-items:center;
   justify-content:center;
+  transition:all 0.2s ease;
 }
+.theme-toggle:hover{transform:scale(1.02);box-shadow:0 10px 30px rgba(2,6,23,0.12)}
+.theme-toggle:active{transform:scale(0.98)}
 
 /* Main */
 .main{max-width:1100px;margin:0 auto;color:#05203b}
@@ -115,13 +124,17 @@ html, body {
 
 /* Actions */
 .actions{display:flex;gap:12px;margin-top:6px;flex-wrap:wrap}
-.btn{padding:12px 18px;border-radius:12px;border:0;cursor:pointer;font-weight:700;min-width:140px}
+.btn{padding:12px 18px;border-radius:12px;border:0;cursor:pointer;font-weight:700;min-width:140px;transition:all 0.2s ease}
+.btn:hover{transform:scale(1.02);box-shadow:0 10px 30px rgba(2,6,23,0.12)}
+.btn:active{transform:scale(0.98)}
 .btn.primary{background:#fff;color:var(--blue1);box-shadow:0 8px 24px rgba(2,6,23,0.08)}
 .btn.outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.18)}
 
 /* Page header + back */
 .toprow{display:flex;justify-content:flex-start;margin-bottom:12px}
-.btn-back{padding:8px 12px;border-radius:10px;border:0;background:#fff;color:var(--blue1);cursor:pointer;box-shadow:var(--card-shadow)}
+.btn-back{position:fixed;left:18px;top:18px;padding:8px 12px;border-radius:10px;border:0;background:#fff;color:var(--blue1);cursor:pointer;box-shadow:var(--card-shadow);z-index:100;transition:all 0.2s ease}
+.btn-back:hover{transform:scale(1.02);box-shadow:0 10px 30px rgba(2,6,23,0.12)}
+.btn-back:active{transform:scale(0.98)}
 
 /* Page title */
 .page-title{font-size:28px;margin:6px 0;color:#fff}
@@ -144,7 +157,7 @@ html, body {
 .btn.success{background:var(--success);color:#fff}
 
 /* Sensors info */
-.sensors-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:16px}
+.sensors-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
 .sensor-info{padding:18px;text-align:left}
 .info-ico{font-size:30px;margin-bottom:8px}
 .specs{margin-top:8px;color:var(--muted);font-size:13px}
@@ -188,8 +201,14 @@ html, body {
 .dark-mode .title,.dark-mode .page-title{color:#fff}
 .dark-mode .subtitle{color:#ccc}
 .dark-mode .feature-ico{background:rgba(255,255,255,0.1)}
-.dark-mode .sensor-info{background:#1a1a1a;color:#fff}
-.dark-mode .about-card{background:#1a1a1a;color:#fff}
+.dark-mode .sensor-info{background:#fff;color:#000;border:1px solid #ddd}
+.dark-mode .sensor-info h3{color:#000}
+.dark-mode .sensor-info p{color:#000}
+.dark-mode .sensor-info .specs{color:#000}
+.dark-mode .about-card{background:#1a1a1a;color:#000}
+.dark-mode .about-card h3{color:#000}
+.dark-mode .about-card p{color:#000}
+.dark-mode .about-card ul li{color:#000}
 .dark-mode .alert-banner{background:#b91c1c;color:#fff}
 .dark-mode .connected-panel{background:#1a1a1a;color:#fff;border:1px solid #333}
 .dark-mode input,.dark-mode select{background:#333;color:#fff;border:1px solid #555}
