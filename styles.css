@@ -13,7 +13,6 @@
   --glass: rgba(255,255,255,0.06);
 }
 
-/* Reset + base */
 *{box-sizing:border-box}
 html, body {
   height: 100%;
@@ -24,7 +23,6 @@ html, body {
 }
 .app{min-height:100vh;position:relative;padding:28px 18px;background:linear-gradient(180deg,var(--blue1),var(--gray))}
 
-/* Pair area (left) */
 #pair-area {
   position: fixed;
   left: 18px;
@@ -75,7 +73,6 @@ html, body {
 #paired-name{ font-size:14px; opacity:0.95; color:#fff; }
 #paired-name.hidden{ display:none; }
 
-/* Theme toggle (right) */
 .theme-toggle{
   position:fixed;
   right:18px;
@@ -95,13 +92,11 @@ html, body {
 .theme-toggle:hover{transform:scale(1.02);box-shadow:0 10px 30px rgba(2,6,23,0.12)}
 .theme-toggle:active{transform:scale(0.98)}
 
-/* Main */
 .main{max-width:1100px;margin:0 auto;color:#05203b}
 .view{padding:18px;background:transparent}
 .view.hidden{display:none}
 .view.active{display:block}
 
-/* Hero */
 .hero{
   display:flex;
   flex-direction:column;
@@ -117,12 +112,10 @@ html, body {
 .title{font-size:42px;color:#fff;margin:0}
 .subtitle{color:#f2f6fb;max-width:720px;text-align:center;margin:0}
 
-/* Features */
 .features{display:flex;gap:20px;align-items:center;justify-content:center;flex-wrap:wrap}
 .feature{display:flex;flex-direction:column;align-items:center;color:#fff;gap:8px}
 .feature-ico{font-size:28px;background:rgba(255,255,255,0.12);padding:12px;border-radius:12px}
 
-/* Actions */
 .actions{display:flex;gap:12px;margin-top:6px;flex-wrap:wrap}
 .btn{padding:12px 18px;border-radius:12px;border:0;cursor:pointer;font-weight:700;min-width:140px;transition:all 0.2s ease}
 .btn:hover{transform:scale(1.02);box-shadow:0 10px 30px rgba(2,6,23,0.12)}
@@ -130,46 +123,39 @@ html, body {
 .btn.primary{background:#fff;color:var(--blue1);box-shadow:0 8px 24px rgba(2,6,23,0.08)}
 .btn.outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.18)}
 
-/* Page header + back */
 .toprow{display:flex;justify-content:flex-start;margin-bottom:12px}
 .btn-back{position:fixed;left:18px;top:18px;padding:8px 12px;border-radius:10px;border:0;background:#fff;color:var(--blue1);cursor:pointer;box-shadow:var(--card-shadow);z-index:100;transition:all 0.2s ease}
 .btn-back:hover{transform:scale(1.02);box-shadow:0 10px 30px rgba(2,6,23,0.12)}
 .btn-back:active{transform:scale(0.98)}
 
-/* Page title */
 .page-title{font-size:28px;margin:6px 0;color:#fff}
 .muted{color:rgba(255,255,255,0.90)}
 
-/* Grid cards */
 .grid-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:14px}
 .card{background:#fff;border-radius:12px;padding:16px;box-shadow:var(--card-shadow);color:#05203b}
 .sensor-card{text-align:center;padding:22px}
 .sensor-ico{font-size:32px;margin-bottom:8px}
 .badge{display:inline-block;padding:6px 10px;border-radius:999px;margin-top:8px;font-weight:700;background:#efefef;color:#05203b;}
 
-/* Progress */
 .progress{height:12px;background:#eee;border-radius:999px;overflow:hidden;margin-top:10px}
 .progress-bar{height:100%;background:linear-gradient(90deg,var(--blue1),var(--blue2));width:0;transition:width .4s ease}
 
-/* Controls */
+
 .controls-row{display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap}
 .btn.danger{background:var(--danger);color:#fff}
 .btn.success{background:var(--success);color:#fff}
 
-/* Sensors info */
 .sensors-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
 .sensor-info{padding:18px;text-align:left}
 .info-ico{font-size:30px;margin-bottom:8px}
 .specs{margin-top:8px;color:var(--muted);font-size:13px}
 
-/* About */
 .about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
 .about-card{padding:18px}
 
-/* CTA */
+
 .cta{text-align:center;margin-top:18px}
 
-/* Alert banner */
 .alert-banner{
   padding:12px;border-radius:10px;margin:12px 0;color:#fff;font-weight:700;display:flex;align-items:center;gap:10px;
   transition:opacity .18s,transform .18s;
@@ -177,22 +163,21 @@ html, body {
 }
 .alert-banner.hidden{display:none}
 
-/* small helpers */
+
 .hidden{display:none !important}
 
-/* Small screens */
+
 @media (max-width:900px){
   .features{flex-direction:row;flex-wrap:wrap}
   .title{font-size:34px}
   .actions{flex-direction:column;width:100%}
   .btn{width:100%}
   .logo-circle{width:100px;height:100px}
-  /* move controls so they don't overlap pair/theme on small screens */
+  
   .theme-toggle{right:18px;top:120px}
   #pair-area{left:18px;top:120px}
 }
 
-/* Dark mode styles */
 .dark-mode .app{background:linear-gradient(180deg,#0b1724,#2b3945) !important}
 .dark-mode .card{background:#1a1a1a;color:#fff;border:1px solid #333}
 .dark-mode .badge{background:#333;color:#fff}
@@ -202,6 +187,7 @@ html, body {
 .dark-mode .title,.dark-mode .page-title{color:#fff}
 .dark-mode .subtitle{color:#ccc}
 .dark-mode .feature-ico{background:rgba(255,255,255,0.1)}
+.dark-mode .sensor-card h3{color:#000}
 .dark-mode .sensor-info{background:#fff;color:#000;border:1px solid #ddd}
 .dark-mode .sensor-info h3{color:#000}
 .dark-mode .sensor-info p{color:#000}
@@ -215,5 +201,4 @@ html, body {
 .dark-mode input,.dark-mode select{background:#333;color:#fff;border:1px solid #555}
 .dark-mode button{background:#333;color:#fff;border:1px solid #555}
 
-/* Accessibility focus */
 button:focus{outline:3px solid rgba(0,123,255,0.18);outline-offset:2px;border-radius:8px}
