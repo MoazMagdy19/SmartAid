@@ -112,8 +112,8 @@ html, body {
   border-radius:16px;
   box-shadow: 0 6px 20px rgba(2,6,23,0.06);
 }
-.logo-circle{width:120px;height:120px;border-radius:999px;background:rgba(255,255,255,0.14);display:flex;align-items:center;justify-content:center}
-.logo-inner{width:64px;height:64px;border-radius:999px;background:#fff;box-shadow:var(--card-shadow)}
+.logo-circle{width:120px;height:120px;border-radius:999px;background:rgba(255,255,255,0.14);display:flex;align-items:center;justify-content:center;box-shadow:var(--card-shadow)}
+.logo-img { width: 100%; height: 100%; object-fit: cover; border-radius: 999px; display: block; }
 .title{font-size:42px;color:#fff;margin:0}
 .subtitle{color:#f2f6fb;max-width:720px;text-align:center;margin:0}
 
@@ -186,6 +186,7 @@ html, body {
   .title{font-size:34px}
   .actions{flex-direction:column;width:100%}
   .btn{width:100%}
+  .logo-circle{width:100px;height:100px}
   /* move controls so they don't overlap pair/theme on small screens */
   .theme-toggle{right:18px;top:120px}
   #pair-area{left:18px;top:120px}
