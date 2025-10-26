@@ -8,7 +8,7 @@
     about: document.getElementById('view-about')
   };
 
-  // voice guidance helpe
+ 
   function speak(text, opts = {}) {
     try {
       if (!('speechSynthesis' in window)) return;
@@ -38,7 +38,7 @@
     }
   }
 
-  // nav wiring
+  
   document.querySelectorAll('[data-nav]').forEach(btn => {
     btn.addEventListener('click', () => {
       const target = btn.getAttribute('data-nav');
@@ -46,7 +46,7 @@
     });
   });
 
-  // theme toggle
+  
   const themeBtn = document.getElementById('theme-toggle');
   let dark = false;
   function updateTheme() {
@@ -61,7 +61,7 @@
   }
   if (themeBtn) themeBtn.addEventListener('click', updateTheme);
 
-  // Simulation elements
+ 
   const alertBanner = document.getElementById('alert-banner');
   const badgeDistance = document.getElementById('badge-distance');
   const badgeGas = document.getElementById('badge-gas');
@@ -69,14 +69,25 @@
   const batteryBar = document.getElementById('battery-bar');
   const batteryPercent = document.getElementById('battery-percent');
 
-  // audio elements (may be null if HTML not updated)
+  
   const audioMotion = document.getElementById('audio-motion');
   const audioGas = document.getElementById('audio-gas');
   const audioAlarm = document.getElementById('audio-alarm');
+  const audioAnnouncement = document.getElementById('audio-announcement');
 
   let batteryLevel = 85;
   let alarmTimeout = null;
   let dangerBg = null;
+  let audioEnabled = false;
+
+  
+  let audioContext = null;
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    audioContext = new AudioContext();
+  } catch (e) {
+    console.warn('AudioContext not supported', e);
+  }
 
   function setBattery(delta) {
     batteryLevel = Math.max(0, Math.min(100, batteryLevel + delta));
@@ -90,7 +101,24 @@
     alertBanner.style.background = bgColor;
     alertBanner.style.opacity = '0.98';
     alertBanner.classList.remove('hidden');
-    //if (autoHideMs) setTimeout(() => alertBanner.classList.add('hidden'), autoHideMs);
+    if (autoHideMs) setTimeout(() => alertBanner.classList.add('hidden'), autoHideMs);
+  }
+
+  function startAlarmSequence(kind) {
+    
+    if (audioAnnouncement) {
+      audioAnnouncement.currentTime = 0;
+      audioAnnouncement.play().catch(() => {
+       
+        speak('Warning! Alert!');
+      }).then(() => {
+       
+        setTimeout(() => triggerAlarm(kind), 1500);
+      });
+    } else {
+      speak('Warning! Alert!');
+      setTimeout(() => triggerAlarm(kind), 1500);
+    }
   }
 
   function triggerAlarm(kind) {
@@ -109,20 +137,40 @@
       document.body.appendChild(dangerBg);
     }
 
-    try {
-      if (kind === 'motion' && audioMotion) { audioMotion.currentTime = 0; audioMotion.play().catch(()=>{}); }
-      if (kind === 'gas' && audioGas) { audioGas.currentTime = 0; audioGas.play().catch(()=>{}); }
-      if (audioAlarm) { audioAlarm.currentTime = 0; audioAlarm.play().catch(()=>{}); }
-    } catch (err) {
-      console.warn('Audio play failed', err);
+    
+    const speechText = kind === 'motion' ? 'Warning! Motion detected nearby' : 'Alert! Gas leak detected';
+    const utterance = new SpeechSynthesisUtterance(speechText);
+    utterance.onend = () => {
+      if (audioEnabled) {
+        try {
+          if (kind === 'motion' && audioMotion) { audioMotion.currentTime = 0; audioMotion.play().catch(() => console.warn('Motion audio play failed')); }
+          if (kind === 'gas' && audioGas) { audioGas.currentTime = 0; audioGas.play().catch(() => console.warn('Gas audio play failed')); }
+          if (audioAlarm) { audioAlarm.currentTime = 0; audioAlarm.play().catch(() => console.warn('Alarm audio play failed')); }
+        } catch (err) {
+          console.warn('Audio play failed', err);
+        }
+      }
+    };
+    if (!window.__voiceMuted) {
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
     }
-
-    // Removed automatic voice guidance for alarms
 
     setBattery(-2);
     clearTimeout(alarmTimeout);
-  //  alarmTimeout = setTimeout(deactivateAlarm, 2000);
+    
   }
+
+  
+  document.addEventListener('click', function enableAudio() {
+    
+    if (audioContext && audioContext.state === 'suspended') {
+      audioContext.resume().catch(e => console.warn('Audio context resume failed', e));
+    }
+    audioEnabled = true;
+    
+    document.removeEventListener('click', enableAudio);
+  });
 
   function deactivateAlarm() {
     if (badgeAlarm) {
@@ -131,13 +179,14 @@
       badgeAlarm.style.color = '#05203b';
     }
     if (dangerBg) { document.body.removeChild(dangerBg); dangerBg = null; }
-    if (alertBanner) setTimeout(()=> alertBanner.classList.add('hidden'), 600);
+    
     try {
       if (audioMotion) { audioMotion.pause(); audioMotion.currentTime = 0; }
       if (audioGas) { audioGas.pause(); audioGas.currentTime = 0; }
       if (audioAlarm) { audioAlarm.pause(); audioAlarm.currentTime = 0; }
+      if (audioAnnouncement) { audioAnnouncement.pause(); audioAnnouncement.currentTime = 0; }
     } catch (e) {}
-    // Removed automatic voice guidance for alarm deactivation
+   
   }
 
   function setAlert(type) {
@@ -159,12 +208,13 @@
       showBanner('🚨 Gas leak detected!', '#b91c1c');
       triggerAlarm('gas');
     } else if (type === 'safe') {
-      showBanner('✅ All clear.', '#065f46', 3000);
+      
+      if (alertBanner) alertBanner.classList.add('hidden');
       deactivateAlarm();
     }
   }
 
-  // wire simulation buttons
+ 
   const btnMotion = document.getElementById('btn-motion');
   const btnGas = document.getElementById('btn-gas');
   const btnSafe = document.getElementById('btn-safe');
@@ -176,7 +226,7 @@
   if (batteryPercent) batteryPercent.textContent = batteryLevel + '%';
   deactivateAlarm();
 
-  // dynamic sensors list
+  
   const sensorsList = [
     { ico: '🔊', name: 'Ultrasonic Sensor', desc: 'Detects nearby objects using sound waves.', specs: 'Range: 2cm - 400cm | Accuracy: ±3mm' },
     { ico: '🌫', name: 'Gas Sensor', desc: 'Detects harmful gases like LPG, methane, propane.', specs: 'Response: <10s' },
@@ -199,16 +249,13 @@
     });
   }
 
-  // initial view
+  
   show('home');
 
-  // --------------------------
-  // Device Pairing (Web Bluetooth) + UI
-  // --------------------------
+  
   const btnPair = document.getElementById('btn-pair');
   const pairedName = document.getElementById('paired-name');
 
-  // load stored paired info
   const PAIR_KEY = 'smartaid_paired_device';
   function loadPaired() {
     const data = localStorage.getItem(PAIR_KEY);
@@ -267,15 +314,10 @@
       await pairDevice();
     }
   });
-
-  // expose for debug
   window.__appShow = show;
 
-  // cleanup
   window.addEventListener('beforeunload', () => {
     deactivateAlarm();
   });
-
-  // global mute flag (can extend with UI later)
   window.__voiceMuted = false;
 })();
