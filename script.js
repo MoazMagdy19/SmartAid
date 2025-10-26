@@ -90,7 +90,7 @@
     alertBanner.style.background = bgColor;
     alertBanner.style.opacity = '0.98';
     alertBanner.classList.remove('hidden');
-    if (autoHideMs) setTimeout(() => alertBanner.classList.add('hidden'), autoHideMs);
+    //if (autoHideMs) setTimeout(() => alertBanner.classList.add('hidden'), autoHideMs);
   }
 
   function triggerAlarm(kind) {
@@ -121,7 +121,7 @@
 
     setBattery(-2);
     clearTimeout(alarmTimeout);
-    alarmTimeout = setTimeout(deactivateAlarm, 2000);
+  //  alarmTimeout = setTimeout(deactivateAlarm, 2000);
   }
 
   function deactivateAlarm() {
