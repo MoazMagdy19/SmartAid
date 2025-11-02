@@ -1,6 +1,5 @@
-
 (function () {
-  
+
   const views = {
     home: document.getElementById('view-home'),
     simulation: document.getElementById('view-simulation'),
@@ -8,7 +7,8 @@
     about: document.getElementById('view-about')
   };
 
- 
+  let currentLang = 'en-US';
+
   function speak(text, opts = {}) {
     try {
       if (!('speechSynthesis' in window)) return;
@@ -35,10 +35,19 @@
       el.classList.remove('hidden');
       el.classList.add('active');
       window.scrollTo(0, 0);
+      // Automatic TTS feedback for page navigation
+      const pageNames = {
+        home: currentLang.startsWith('ar') ? 'الصفحة الرئيسية' : 'Home page',
+        simulation: currentLang.startsWith('ar') ? 'صفحة المحاكاة' : 'Simulation page',
+        sensors: currentLang.startsWith('ar') ? 'صفحة الحساسات' : 'Sensors page',
+        about: currentLang.startsWith('ar') ? 'صفحة عن النظام' : 'About page'
+      };
+      const announcement = pageNames[page] || page;
+      speak(announcement, { lang: currentLang });
+      console.log('Spoken page:', page);
     }
   }
 
-  
   document.querySelectorAll('[data-nav]').forEach(btn => {
     btn.addEventListener('click', () => {
       const target = btn.getAttribute('data-nav');
@@ -46,7 +55,6 @@
     });
   });
 
-  
   const themeBtn = document.getElementById('theme-toggle');
   let dark = false;
   function updateTheme() {
@@ -61,7 +69,6 @@
   }
   if (themeBtn) themeBtn.addEventListener('click', updateTheme);
 
- 
   const alertBanner = document.getElementById('alert-banner');
   const badgeDistance = document.getElementById('badge-distance');
   const badgeGas = document.getElementById('badge-gas');
@@ -69,7 +76,6 @@
   const batteryBar = document.getElementById('battery-bar');
   const batteryPercent = document.getElementById('battery-percent');
 
-  
   const audioMotion = document.getElementById('audio-motion');
   const audioGas = document.getElementById('audio-gas');
   const audioAlarm = document.getElementById('audio-alarm');
@@ -80,7 +86,6 @@
   let dangerBg = null;
   let audioEnabled = false;
 
-  
   let audioContext = null;
   try {
     const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -105,14 +110,14 @@
   }
 
   function startAlarmSequence(kind) {
-    
+
     if (audioAnnouncement) {
       audioAnnouncement.currentTime = 0;
       audioAnnouncement.play().catch(() => {
-       
+
         speak('Warning! Alert!');
       }).then(() => {
-       
+
         setTimeout(() => triggerAlarm(kind), 1500);
       });
     } else {
@@ -137,7 +142,7 @@
       document.body.appendChild(dangerBg);
     }
 
-    
+
     const speechText = kind === 'motion' ? 'Warning! Motion detected nearby' : 'Alert! Gas leak detected';
     const utterance = new SpeechSynthesisUtterance(speechText);
     utterance.onend = () => {
@@ -158,17 +163,17 @@
 
     setBattery(-2);
     clearTimeout(alarmTimeout);
-    
+
   }
 
-  
+
   document.addEventListener('click', function enableAudio() {
-    
+
     if (audioContext && audioContext.state === 'suspended') {
       audioContext.resume().catch(e => console.warn('Audio context resume failed', e));
     }
     audioEnabled = true;
-    
+
     document.removeEventListener('click', enableAudio);
   });
 
@@ -179,14 +184,14 @@
       badgeAlarm.style.color = '#05203b';
     }
     if (dangerBg) { document.body.removeChild(dangerBg); dangerBg = null; }
-    
+
     try {
       if (audioMotion) { audioMotion.pause(); audioMotion.currentTime = 0; }
       if (audioGas) { audioGas.pause(); audioGas.currentTime = 0; }
       if (audioAlarm) { audioAlarm.pause(); audioAlarm.currentTime = 0; }
       if (audioAnnouncement) { audioAnnouncement.pause(); audioAnnouncement.currentTime = 0; }
     } catch (e) {}
-   
+
   }
 
   function setAlert(type) {
@@ -208,13 +213,13 @@
       showBanner('🚨 Gas leak detected!', '#b91c1c');
       triggerAlarm('gas');
     } else if (type === 'safe') {
-      
+
       if (alertBanner) alertBanner.classList.add('hidden');
       deactivateAlarm();
     }
   }
 
- 
+
   const btnMotion = document.getElementById('btn-motion');
   const btnGas = document.getElementById('btn-gas');
   const btnSafe = document.getElementById('btn-safe');
@@ -226,7 +231,7 @@
   if (batteryPercent) batteryPercent.textContent = batteryLevel + '%';
   deactivateAlarm();
 
-  
+
   const sensorsList = [
     { ico: '🔊', name: 'Ultrasonic Sensor', desc: 'Detects nearby objects using sound waves.', specs: 'Range: 2cm - 400cm | Accuracy: ±3mm' },
     { ico: '🌫', name: 'Gas Sensor', desc: 'Detects harmful gases like LPG, methane, propane.', specs: 'Response: <10s' },
@@ -249,10 +254,10 @@
     });
   }
 
-  
+
   show('home');
 
-  
+
   const btnPair = document.getElementById('btn-pair');
   const pairedName = document.getElementById('paired-name');
 
